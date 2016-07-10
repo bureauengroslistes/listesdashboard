@@ -1,0 +1,116 @@
+#loadscreen {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.8);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: visibility 0s, opacity 0.1s ease-in;
+    -moz-transition: visibility 0s, opacity 0.1s ease-in;
+    transition: visibility 0s, opacity 0.1s ease-in;
+}
+
+#loadscreen.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+#loadscreen > .loadpopup {
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 10px 20px 13px 20px;
+    background: #ffffff;
+    color: #333333;
+    overflow: hidden;
+    -webkit-box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.75);
+}
+
+#loadscreen > .loadpopup > #loadtitle {
+    font-weight: bold;
+}
+
+#loadscreen > .loadpopup > p {
+    margin-bottom: 0;
+}
+
+#loadscreen > .loadpopup > .loadspinner {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: auto 15px auto 0;
+    float: left;
+}
+
+#loadscreen.done > .loadpopup > .loadspinner {
+    display: none;
+}
+
+#loadscreen > .loadpopup > .loaddone {
+    display: none;
+    width: 60px;
+    height: 60px;
+    margin: auto 15px auto 0;
+    float: left;
+    font-size: 60px;
+    color: #28b62c;
+}
+
+#loadscreen.done > .loadpopup > .loaddone {
+    display: block;
+}
+
+.smallspinner {
+    display: none;
+    width: 24px;
+    height: 24px;
+}
+
+.smallspinner.show {
+    display: block;
+}
+
+.jfdlogo {
+    width: 240px;
+    height: 240px;
+    display: block;
+    margin: 20px auto;
+    -webkit-filter: drop-shadow(0 0 5px rgba(9, 9, 30, 0.8));
+    filter: drop-shadow(0 0 5px rgba(9, 9, 30, 0.8));
+}
+
+.jfdlogotop {
+    width: 64px;
+    height: 64px;
+    margin: 20px 15px;
+    float: left;
+    -webkit-filter: drop-shadow(0 0 5px rgba(9, 9, 30, 0.8));
+    filter: drop-shadow(0 0 5px rgba(9, 9, 30, 0.8));
+}
+
+.apptitle {
+    font-family: 'Lobster', cursive;
+}
+
+.space-before {
+    margin-top: 20px;
+}
+
+.onlyprint {
+    display: none;
+}
+
+@media print {
+    .noprint {
+        display: none;
+    }
+
+    .onlyprint {
+        display: block;
+    }
+}

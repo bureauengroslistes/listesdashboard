@@ -1,10 +1,38 @@
-<html>
+<!DOCTYPE html>
+<html class="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Tableau de bord listes scolaires par Jean-François Desrochers</title>
+        <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/superhero/bootstrap.min.css" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+        <link href="/css/dashboard.min.css" rel="stylesheet">
+        <style type="text/css">
 
-<head></head>
+        </style>
+    </head>
+    <body>
+        <div id="loadscreen">
+            <div class="loadpopup">
+                <img src="/img/loading.gif" class="loadspinner">
+                <div class="loaddone glyphicon glyphicon-ok-circle"></div>
+                <p id="loadtitle">Chargement en cours...</p>
+                <p id="loadmessage">Le chargement de vos données est en cours, merci de patienter...</p>
+            </div>
+        </div>
+        <div id="hbcontents"></div>
 
-<body>
-
-<p>Site en construction.</p>
-
-</body>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
+        <script src="/js/tabletop.min.js"></script>
+        <script src="/js/dashboard.min.js"></script>
+        <script type="text/javascript">
+            data = new Dashdata();
+            m.route.mode = "hash";
+            m.route(document.getElementById("hbcontents"), "/", {
+                "/": m.component(Dashapp, data),
+                "/:store": m.component(Dashapp, data)
+            });
+        </script>
+    </body>
 </html>
