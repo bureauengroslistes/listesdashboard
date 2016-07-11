@@ -39,15 +39,30 @@ var Dashdata = function () {
     var self = {};
 
     // Public
-    self.answers = m.prop([]);
+    self.answers = m.prop({});
+    self.error = m.prop("");
     self.loadData = function(storeName) {
         showLoading(true, "Chargement des données...", "Le chargement de vos données est en cours, merci de patienter...");
-        var sheet = new Tabletop({key: SHEET_URL, simpleSheet: true, callback: function(data) {
-            m.startComputation();
-            self.answers(data);
-            m.endComputation();
-            showLoading(false);
-        }});
+        self.error("");
+        self.answers({});
+        sheetrock({
+            url: SHEET_URL,
+            query: "select A,B,C,D,E,F,G,H,I,J,K where B = '" + storeName + "' order by A desc",
+            reset: true,
+            callback: function(error, options, response) {
+                if (!error) {
+                    m.startComputation();
+                    self.answers(response.rows);
+                    m.endComputation();
+                    showLoading(false);
+                } else {
+                    m.startComputation();
+                    self.error("Une erreur est survenue lors de la récupération des données. (" + error + ") Veuillez contacter le développeur.");
+                    m.endComputation();
+                    showLoading(false);
+                }
+            }
+        });
     };
 
     return self;
@@ -118,52 +133,53 @@ var Dashapp = {
                                 m("th", "Numéro de l'étiquette"),
                                 m("th")
                         ])),
-                        m("tbody", ctrl.data.answers().filter(function(answer) {
-                            return answer.storecity == STORES[ctrl.store];
+                        m("tbody", ctrl.data.error() ? m("td.text-danger", ctrl.data.error())
+                        : (ctrl.data.answers().length > 1) ? ctrl.data.answers().filter(function(answer, index) {
+                            return index != 0;
                         }).map(function(answer) {
                             return m("tr", [
-                                m("td", answer.storecity),
-                                m("td", answer.datetime),
-                                m("td", answer.custname),
-                                m("td", answer.custphone),
-                                m("td", answer.custemail),
-                                m("td", answer.childname),
-                                m("td", answer.childgender),
-                                m("td", answer.schoolname),
-                                m("td", answer.schoolclass),
-                                m("td", answer.schoolgroup),
-                                m("td", answer.labelno),
+                                m("td", answer.cells.storecity),
+                                m("td", answer.cells.datetime),
+                                m("td", answer.cells.custname),
+                                m("td", answer.cells.custphone),
+                                m("td", answer.cells.custemail),
+                                m("td", answer.cells.childname),
+                                m("td", answer.cells.childgender),
+                                m("td", answer.cells.schoolname),
+                                m("td", answer.cells.schoolclass),
+                                m("td", answer.cells.schoolgroup),
+                                m("td", answer.cells.labelno),
                                 m("td", m("button.btn.btn-success.btn-xs", {onclick: ctrl.printRow.bind(null, ctrl.data.answers().indexOf(answer))}, "Imprimer..."))
                             ])
-                        }))
+                        }) : m("td.text-warning", "Aucune donnée n'a été trouvée."))
                     ])
                 ])
             ]))),
-            notLoaded ? "" : m("div.onlyprint", ctrl.answerIndex() > -1 ? [
+            notLoaded ? "" : m("div.onlyprint", (ctrl.answerIndex() > -1) && (ctrl.data.answers()) ? [
                 m("h3", "Liste à préparer"),
                 m("h4", "Client"),
                 m("p", [
-                    ctrl.data.answers()[ctrl.answerIndex()].custname,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.custname,
                     m("br"),
-                    ctrl.data.answers()[ctrl.answerIndex()].custphone,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.custphone,
                     m("br"),
-                    ctrl.data.answers()[ctrl.answerIndex()].custemail
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.custemail
                 ]),
                 m("h4", "Enfant"),
                 m("p", [
-                    ctrl.data.answers()[ctrl.answerIndex()].childname,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.childname,
                     m("br"),
-                    ctrl.data.answers()[ctrl.answerIndex()].childgender,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.childgender,
                     m("br"),
-                    "Étiquette #" + ctrl.data.answers()[ctrl.answerIndex()].labelno
+                    "Étiquette #" + ctrl.data.answers()[ctrl.answerIndex()].cells.labelno
                 ]),
                 m("h4", "École"),
                 m("p", [
-                    ctrl.data.answers()[ctrl.answerIndex()].schoolname,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.schoolname,
                     m("br"),
-                    ctrl.data.answers()[ctrl.answerIndex()].schoolclass,
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.schoolclass,
                     m("br"),
-                    ctrl.data.answers()[ctrl.answerIndex()].schoolgroup
+                    ctrl.data.answers()[ctrl.answerIndex()].cells.schoolgroup
                 ])
             ] : m("h2", "Aucunes données à imprimer."))
         ]);
