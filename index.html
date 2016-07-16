@@ -25,13 +25,14 @@
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
         <script src="/js/sheetrock.min.js"></script>
+        <script src="/js/md5.min.js"></script>
         <script src="/js/dashboard.min.js"></script>
         <script type="text/javascript">
             data = new Dashdata();
             m.route.mode = "hash";
             m.route(document.getElementById("hbcontents"), "/", {
                 "/": m.component(Dashapp, data),
-                "/:store": m.component(Dashapp, data)
+                "/:store/:key": m.component(Dashapp, data)
             });
         </script>
     </body>

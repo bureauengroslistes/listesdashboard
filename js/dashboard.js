@@ -1,5 +1,6 @@
 var STORES = {"139": "Drummondville", "220": "Sorel", "245": "Boucherville"};
 var SHEET_URL = "https://docs.google.com/spreadsheets/d/1CAAR3P6PM2NwHPlyeDfRNQshZyaH8X2mw4ZwxJ_r1CU/pubhtml?gid=1745505354";
+var PSK = "a61711e96496bcfce1c2931ec5c2cbe7";
 
 
 var topBanner = function(notLoaded) {
@@ -76,19 +77,21 @@ var Dashapp = {
         // Public
         self.data = data;
         self.store = m.route.param("store");
+        self.key = m.route.param("key");
         self.frontpage = m.prop(true);
         self.storeEntry = m.prop("");
+        self.passEntry = m.prop("");
         self.answerIndex = m.prop(-1);
 
         self.loadStore = function() {
-            m.route("/" + self.storeEntry());
+            m.route("/" + self.storeEntry() + "/" + md5(self.passEntry()));
         };
         self.reloadData = function() {
             data.loadData(STORES[self.store]);
         };
         self.storeKeyUp = function(e) {
             if (e.keyCode == 13) {
-                m.route("/" + self.storeEntry());
+                m.route("/" + self.storeEntry() + "/" + md5(self.passEntry()));
             }
         };
         self.printRow = function(rowno) {
@@ -97,7 +100,7 @@ var Dashapp = {
             window.print();
         };
 
-        if (self.store && self.store in STORES) {
+        if (self.store && self.store in STORES && self.key == PSK) {
             self.frontpage(false);
             data.loadData(STORES[self.store]);
         }
@@ -114,6 +117,8 @@ var Dashapp = {
                     m("div.col-sm-8.col-sm-offset-2.text-center", [
                         m("div.lead", "Numéro de magasin :"),
                         m("input.form-control", {type: "text", onchange: m.withAttr("value", ctrl.storeEntry), onkeyup: ctrl.storeKeyUp}),
+                        m("div.lead.space-before", "Mot de passe :"),
+                        m("input.form-control", {type: "password", onchange: m.withAttr("value", ctrl.passEntry), onkeyup: ctrl.storeKeyUp}),
                         m("button.btn.btn-primary.btn-lg.space-before", {onclick: ctrl.loadStore}, "Charger les données...")
                     ])
                 ]) : m("div.space-before", [
