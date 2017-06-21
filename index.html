@@ -7,7 +7,7 @@
         <title>Tableau de bord listes scolaires par Jean-François Desrochers</title>
         <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/superhero/bootstrap.min.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
-        <link href="/css/dashboard.min.css" rel="stylesheet">
+        <link href="/css/dashboard.css" rel="stylesheet">
         <style type="text/css">
 
         </style>
@@ -22,18 +22,12 @@
             </div>
         </div>
         <div id="hbcontents"></div>
-
-        <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.5/mithril.min.js"></script>
+        
+        <script src="//www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+        <script src="/js/mithril.min.js"></script>
         <script src="/js/sheetrock.min.js"></script>
         <script src="/js/md5.min.js"></script>
-        <script src="/js/dashboard.min.js"></script>
-        <script type="text/javascript">
-            data = new Dashdata();
-            m.route.mode = "hash";
-            m.route(document.getElementById("hbcontents"), "/", {
-                "/": m.component(Dashapp, data),
-                "/:store/:key": m.component(Dashapp, data)
-            });
-        </script>
+        <script src="/js/property.js"></script>
+        <script src="/js/dashboard.js"></script>
     </body>
 </html>

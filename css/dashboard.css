@@ -101,6 +101,18 @@
     margin-top: 20px;
 }
 
+.status1 .statuslbl {
+    color: #f0ad4e;
+}
+
+.status2 .statuslbl {
+    color: #5cb85c;
+}
+
+.status3 {
+    opacity: 0.25;
+}
+
 .onlyprint {
     display: none;
 }
