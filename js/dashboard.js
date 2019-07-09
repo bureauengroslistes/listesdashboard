@@ -1,4 +1,4 @@
-var STORES = {
+/*var STORES = {
     "88": "St-Jean-sur-Richelieu",
     "105": "St-Hyacinthe",
     "128": "St-Bruno-de-Montarville",
@@ -8,8 +8,11 @@ var STORES = {
     "245": "Boucherville",
     "325": "Candiac",
     "427": "Beloeil"
+};*/
+var STORES = {
+    "220": "Sorel-Tracy"
 };
-var SHEET_URL = "https://docs.google.com/spreadsheets/d/1RUkDXJUWIutENxUZE8uS331EIgBkiFb2Uqb0Ns3GkKg/edit?gid=1222965783";
+var SHEET_URL = "https://docs.google.com/spreadsheets/d/1bUYnwL1xGQstAzIe_zpz8JXWJV_WUUjMHgmRPiAMQ3o/edit?gid=1222965783";
 var PSK = "a61711e96496bcfce1c2931ec5c2cbe7";
 var FORMDATA = {
     datetime: 0,
@@ -29,6 +32,23 @@ var FORMDATA = {
     uniqueid: 14,
     status: 15
 }
+/*var FORMDATA = {
+    datetime: 0,
+    schoolname: 1,
+    schoolclass: 2,
+    schoolgroup: 3,
+    childgender: 4,
+    childname: 5,
+    childcolor: 6,
+    labelno: 7,
+    specialrequest: 8,
+    custname: 9,
+    custphone: 10,
+    custemail: 11,
+    contactpref: 12,
+    uniqueid: 13,
+    status: 14
+}*/
 var FORMSTATUSSTR = ['Nouveau, pas commencé', 'Commencé, pas prêt', 'Prêt au ramassage', 'Ramassé']
 var FORMSTATUS = {
     notstarted: 0,
@@ -108,7 +128,7 @@ var Dashdata = function () {
         self.answers([]);
         sheetrock({
             url: SHEET_URL,
-            query: "select A,B,C,D,E,F,G,H,I,J,K,L,M,N where B = '" + storeName + "' order by A desc",
+            query: "select A,B,C,D,E,F,G,H,I,J,K,L,M order by A desc",
             reset: true,
             callback: function(error, options, response) {
                 if (!error) {
@@ -117,8 +137,9 @@ var Dashdata = function () {
                         var statuses = snapshot.val() || {};
                         response.rows.forEach(function (el) {
                             var uid = uniqueID(el.cellsArray);
+                            el.cellsArray.splice(1, 0, [storeNumber]);
                             el.cellsArray.push(uid);
-                            el.cellsArray.push(statuses[uid] || 0)
+                            el.cellsArray.push(statuses[uid] || 0);
                             answers.push(el.cellsArray);
                         });
                         self.answers(answers);
@@ -248,7 +269,7 @@ var Dashapp = {
                                 m("td", m("button.btn.btn-success.btn-xs", {onclick: self.printRow(idx + 1)}, "Imprimer les détails...")),
                                 m("td", m("button.btn" + (answer[FORMDATA.status] == FORMSTATUSSTR.length - 1 ? ".btn-danger" : ".btn-info") + ".btn-xs", {onclick: self.setStep(
                                     answer[FORMDATA.uniqueid],
-                                    idx + 1, 
+                                    idx + 1,
                                     answer[FORMDATA.status] == FORMSTATUSSTR.length - 1 ? 0 : answer[FORMDATA.status] + 1
                                 )}, answer[FORMDATA.status] == FORMSTATUSSTR.length - 1 ? "Réinitialiser..." : "Avancer à " + FORMSTATUSSTR[answer[FORMDATA.status] + 1]))
                             ])
